@@ -68,6 +68,8 @@ class Sprite
     # which freely follows the player as he/she moves the world
     @x = @game_x - $gtk.args.state.camera.game_x
     @y = @game_y - $gtk.args.state.camera.game_y
+    @sprite.x = @x # @sprite.x is DragonRuby helper method for @sprite[0]
+    @sprite.y = @y # @sprite.y is DragonRuby helper method for @sprite[1]
   end
 end
 ```
