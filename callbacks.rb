@@ -53,7 +53,7 @@ module Callbacks
       end
     end
 
-    # DONT USE THE INSTANCE VARIABLE IS GONNA BE CALLED EVERY TICK! (i.e. @sprite);
+    # DONT USE THE INSTANCE VARIABLE THAT IS GONNA BE CALLED EVERY TICK! (i.e. @sprite);
     # ... as it can potentially slow down (to varying degrees) your game
     # better just eager-evaluate the value and set or cache it somehow deterministically on write / changes (to its value dependencies)
     # therefore, probably you'd want to use attr_writer_with_callbacks above instead to cache the value
