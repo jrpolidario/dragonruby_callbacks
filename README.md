@@ -187,5 +187,5 @@ foo.y('somevalue')
 * open terminal and `cd` into this directory, and then run `ruby ./callbacks_test.rb`
 
 ### TODO
-* should DragonRuby upgrade ruby version into 2.0, use `.prepend` in conjuction with `super` instead instead to have cleaner callbacks hook methods.
+* should DragonRuby upgrade ruby version into 2.0, use `.prepend` in conjuction with `super` instead instead to have cleaner callbacks hook methods. Won't need to call `run_callbacks` explicitly anymore in custom methods.
 * when the need already arises, implement `around` (If you have ideas or want to help this part, please feel free to fork or send me a message! :)
