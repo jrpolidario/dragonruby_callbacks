@@ -124,11 +124,6 @@ if args.state.dooge.moved?
   dooge.game_x += x_move_speed_towards_hooman
   dooge.game_y += y_move_speed_towards_hooman
 end
-
-if camera.moved?
-  args.state.dooge.game_x =
-
-
 ```
 
 ### DSL
