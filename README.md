@@ -198,6 +198,14 @@ class Foo
 
     * This just combines both `attr_reader_with_callbacks` and `attr_writer_with_callbacks` (see them above).
 
+* `before_callbacks`
+
+    * hash of array of all defined before callbacks
+
+* `after_callbacks`
+
+    * hash of array of all defined after callbacks
+
 #### Instance Methods
 
 * `run_callbacks(method_name, *args) do ... end`
