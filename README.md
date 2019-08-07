@@ -170,8 +170,8 @@ class Foo
 
     * Similar to ruby's `attr_reader` except only that the defined getter method is wrapped with a `run_callbacks` block:
     * DON'T USE THIS for instance variables that you are gonna be "reading" or calling in each tick! ... as this will slow down your app (in varying degrees). Better just eager-evaluate the value and set or cache it somehow deterministically on write / changes (to its value dependencies)
-    # therefore, probably you'd want to use attr_writer_with_callbacks to each of this value's dependency attributes instead to cache the value
-    # i.e. don't use this for the `:sprite` instance variable! as each call to `.sprite` will run each defined callbacks. Imagine if you have 1000 Sprite objects each on the page each of which `.sprite` is called!
+    * therefore, probably you'd want to use attr_writer_with_callbacks to each of this value's dependency attributes instead to cache the value
+    * i.e. don't use this for the `:sprite` instance variable! as each call to `.sprite` will run each defined callbacks. Imagine if you have 1000 Sprite objects each on the page each of which `.sprite` is called!
 
 ```ruby
 class Foo
