@@ -116,8 +116,8 @@ if args.state.dooge.moved?
     (x_distance_between_hooman_and_doge ** 2) + (y_distance_between_hooman_and_doge ** 2)
   )
 
-  x_move_speed_towards_hooman = x_distance_between_hooman_and_doge / (distance_to_travel / move_speed)
-  y_move_speed_towards_hooman = y_distance_between_hooman_and_doge / (distance_to_travel / move_speed)
+  x_move_speed_towards_hooman = x_distance_between_hooman_and_doge / (distance_to_travel / args.state.dooge.move_speed)
+  y_move_speed_towards_hooman = y_distance_between_hooman_and_doge / (distance_to_travel / args.state.dooge.move_speed)
 
   # because dooge.game_x= and dooge.game_y= have after callbacks calling update_screen_coordinates_with_respect_to_camera
   # then dooge's x and y values on the screen would be automatically updated
