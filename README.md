@@ -6,7 +6,7 @@
 * Probably gonna expand as I need it to be, as my game grows.
 
 ### Dependencies
-* DragonRuby's current ruby version: 1.9
+* [DragonRuby](https://dragonruby.itch.io/)'s current ruby version: 1.9
 * No-strong dependency to DragonRuby (yet or maybe never?), so you can use this in your own non-DrargonRuby projects
 
 ### Usage (Motivation)
