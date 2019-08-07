@@ -27,8 +27,9 @@ class Sprite
   # you only are gonna be "reading" these values, that's why I changed this from `attr_accessor`
   attr_reader :sprite, :x, :y, :r, :g, :b, :alpha, :speed_x, :speed_y, :height, :image, :width, :height, :rotation
 
-  # now for "writing" values, instead of the default `attr_writer` generated-methods, my Callbacks module provides the following method
-  # which just basically wraps the normal `attr_writer` setter methods with a `run_callbacks do ... end` block
+  # now for "writing" values, instead of the default `attr_writer` generated-methods,
+  # my Callbacks module provides the following method which just basically wraps the
+  # normal `attr_writer` setter methods with a `run_callbacks do ... end` block
   # which you'd want to do in order to perform "something" if the value has been changed.
   attr_writer_with_callbacks :sprite, :x, :y, :r, :g, :b, :alpha, :speed_x, :speed_y, :height, :image, :width, :height, :rotation
 
