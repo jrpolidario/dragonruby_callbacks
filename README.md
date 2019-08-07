@@ -7,7 +7,7 @@
 
 ### Dependencies
 * [DragonRuby](https://dragonruby.itch.io/)'s current ruby version: 1.9
-* No-strong dependency to DragonRuby (yet or maybe never?), so you can use this in your own non-DrargonRuby projects
+* No-strong dependency to DragonRuby (yet or maybe never?), so you can use this in your own non-DragonRuby projects
 
 ### Usage (Motivation)
 
