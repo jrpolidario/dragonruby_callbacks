@@ -44,8 +44,7 @@ class Sprite
   # end
 
   def initialize(opts = {})
-    @game_x = opts.fetch(:game_x)
-    @game_y = opts.fetch(:game_y)
+    @move_speed = opts.fetch(:move_speed)
 
     update_screen_coordinates_with_respect_to_camera
 
@@ -53,10 +52,10 @@ class Sprite
     @height = opts.fetch(:height)
     @image = opts.fetch(:image)
     @rotation = opts[:rotation] || 0
-    @alpha = opts.fetch(:alpha)
-    @r = opts.fetch(:r)
-    @g = opts.fetch(:g)
-    @b = opts.fetch(:b)
+    @alpha = opts[:alpha]
+    @r = opts[:r]
+    @g = opts[:g]
+    @b = opts[:b]
 
     @sprite = [@x, @y, @width, @height, @image, @rotation, @alpha, @r, @g, @b]
   end
@@ -72,6 +71,65 @@ class Sprite
     @sprite.y = @y # @sprite.y is DragonRuby helper method for @sprite[1]
   end
 end
+```
+
+* ^ all of the above just means that I could do the following
+
+```ruby
+args.state.dooge ||= Sprite.new(
+  game_x: 50,
+  game_y: 75,
+  move_speed: 8,
+  width: 64,
+  height: 64,
+  image: 'images/dooge.png'
+)
+
+args.state.hooman ||= Sprite.new(
+  game_x: 0,
+  game_y: 0,
+  move_speed: 5,
+  width: 64,
+  height: 128,
+  image: 'images/hooman.png'
+)
+
+camera ||= Camera.new
+
+# let's pretend I have a defined control! method that allows key presses (w, s, a, or, d)
+# to move hooman
+control!(args.state.hooman)
+
+if args.state.hooman.moved?
+  # camera follows hooman if hooman moved
+  camera.game_x = args.state.hooman.game_x
+  camera.game_y = args.state.hooman.game_y
+end
+
+if args.state.dooge.moved?
+  # let's just PRETEND on this tick, hooman didn't move (i.e. i didnt press any control key)
+  # however let's say on this tick dooge is moving towards hooman (i mean because he is dooge)
+  # ... and so dooge.game_x
+  x_distance_between_hooman_and_doge = args.state.hooman.game_x - args.state.doge.game_x
+  y_distance_between_hooman_and_doge = args.state.hooman.game_y - args.state.doge.game_y
+
+  distance_to_travel = Math.sqrt(
+    (x_distance_between_hooman_and_doge ** 2) + (y_distance_between_hooman_and_doge**2)
+  )
+
+  x_move_speed_towards_hooman = x_distance_between_hooman_and_doge / (distance_to_travel / move_speed)
+  y_move_speed_towards_hooman = y_distance_between_hooman_and_doge / (distance_to_travel / move_speed)
+
+  # because dooge.game_x= and dooge.game_y= have after callbacks calling update_screen_coordinates_with_respect_to_camera
+  # then dooge's x and y values on the screen would be automatically updated
+  dooge.game_x += x_move_speed_towards_hooman
+  dooge.game_y += y_move_speed_towards_hooman
+end
+
+if camera.moved?
+  args.state.dooge.game_x =
+
+
 ```
 
 ### DSL
