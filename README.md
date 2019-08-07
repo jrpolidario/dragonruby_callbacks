@@ -113,7 +113,7 @@ if args.state.dooge.moved?
   y_distance_between_hooman_and_doge = args.state.hooman.game_y - args.state.doge.game_y
 
   distance_to_travel = Math.sqrt(
-    (x_distance_between_hooman_and_doge ** 2) + (y_distance_between_hooman_and_doge**2)
+    (x_distance_between_hooman_and_doge ** 2) + (y_distance_between_hooman_and_doge ** 2)
   )
 
   x_move_speed_towards_hooman = x_distance_between_hooman_and_doge / (distance_to_travel / move_speed)
