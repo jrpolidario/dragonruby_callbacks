@@ -2,7 +2,7 @@
 
 * A simple callback plug-n-play DSL for any Class heavily influenced by [Rails' ActiveSupport::Callbacks](https://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html)
 * Allows `before` and `after` hooks for calls to any method. TODO :`around`
-* Focuses on performance (not saying though it already is!! Tests still need to be done :)
+* Focuses on performance (not saying though it already is!! Performance tests still need to be done :)
 * Probably gonna expand as I need it to be, as my game grows.
 
 ### Dependencies
@@ -11,9 +11,9 @@
 
 ### Usage (Motivation)
 
-* In DragonRuby, I wanted my Sprite objects to automatically adjust the position of the sprite on the page when my character moves on the world (because the camera / view is following my character centered on the screen). I do not want to keep myself worrying about every update / change that needs to be done. And so, I wrote this small module to be used like as following (for example in my case)
+* In DragonRuby, I wanted my Sprite objects to automatically adjust the position of the sprite on the page when my character moves on the world (because the camera / view is following my character centered on the screen). I do not want to keep myself worrying about every update / change that needs to be done. And so, I wrote this small module to be used like the following (for example in my case)
 
-```
+```ruby
 # assuming you copy callbacks.rb into your /app folder
 require 'app/callbacks.rb'
 
@@ -69,6 +69,7 @@ class Sprite
     @y = @game_y - $gtk.args.state.camera.game_y
   end
 end
+```
 
 ### DSL
 
@@ -95,7 +96,7 @@ end
 
     * Similar to ruby's `attr_writer` except only that the defined setter method is wrapped with a `run_callbacks` block:
 
-```
+```ruby
 class Foo
   include Callbacks
 
@@ -117,7 +118,7 @@ class Foo
     # therefore, probably you'd want to use attr_writer_with_callbacks to each of this value's dependency attributes instead to cache the value
     # i.e. don't use this for the `:sprite` instance variable! as each call to `.sprite` will run each defined callbacks. Imagine if you have 1000 Sprite objects each on the page each of which `.sprite` is called!
 
-```
+```ruby
 class Foo
   include Callbacks
 
@@ -143,7 +144,7 @@ class Foo
     * runs all defined callbacks for `method_name`, starting by running first all `before_callbacks`, then running the inside of the `do ... end` block, then finally running all `after_callbacks`.
     * `*args` will be yielded to the block as arguments
 
-```
+```ruby
 class Foo
   include Callbacks
 
@@ -179,6 +180,10 @@ foo.y('somevalue')
 # => before y is called with argument: somevalue
 # => y is called!
 ```
+
+### Test
+
+* open terminal and `cd` into this directory, and then run `ruby ./callbacks_test.rb`
 
 ### TODO
 * should DragonRuby upgrade ruby version into 2.0, use `.prepend` in conjuction with `super` instead instead to have cleaner callbacks hook methods.
