@@ -109,7 +109,6 @@ end
 if args.state.dooge.moved?
   # let's just PRETEND on this tick, hooman didn't move (i.e. i didnt press any control key)
   # however let's say on this tick dooge is moving towards hooman (i mean because he is dooge)
-  # ... and so dooge.game_x
   x_distance_between_hooman_and_doge = args.state.hooman.game_x - args.state.doge.game_x
   y_distance_between_hooman_and_doge = args.state.hooman.game_y - args.state.doge.game_y
 
