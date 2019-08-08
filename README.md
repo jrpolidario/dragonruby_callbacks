@@ -211,6 +211,7 @@ class Monster
   def despawn
     # do something here, like say removing the Monster from the world
   end
+end
 ```
 
 ### DSL
@@ -251,6 +252,7 @@ class Foo
   #     @bar = arg
   #   end
   # end
+end
 ```
 
 * `attr_reader_with_callbacks(*instance_variable_names)`
@@ -273,6 +275,7 @@ class Foo
   #     @bar
   #   end
   # end
+end
 ```
 
 * `attr_accessor_with_callbacks(*instance_variable_names)`
