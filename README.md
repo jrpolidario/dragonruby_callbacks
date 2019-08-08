@@ -43,7 +43,7 @@ class Sprite
 
   # you can add multiple callbacks to a method (callbacks are called sequentially in FCFS order)
   # after :game_x=, :do_something_1
-  # after :game_y=, :do_something_2
+  # after :game_x=, :do_something_2
 
   # for flexibility, you can also use one or many "block" mode:
   # after :game_x= do |arg|
