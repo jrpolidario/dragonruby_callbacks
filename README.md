@@ -191,7 +191,7 @@ foo.bar= 'somevalue'
 foo.instance_variable_set(:bar, 'somevalue')
 ```
 
-* At the moment, I am not compelled (yet?) to fully support skipping callbacks because I do not want to pollute the DSL and I do not find myself yet needing such behaviour, because the callbacks are there for "integrity". If I really want the callbacks conditional, I'll just wrap the block with `if some_condition ... end`, or supply a third optional argument: `:if`. See below.
+* At the moment, I am not compelled (yet?) to fully support skipping callbacks because I do not want to pollute the DSL and I do not find myself yet needing such behaviour, because the callbacks are there for "integrity". If I really want the callbacks conditional, I'll just use the conditional argument. See below.
 
 ### Conditional Callbacks
 
