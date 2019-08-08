@@ -141,6 +141,47 @@ class TestCallbacks < Test::Unit::TestCase
     assert_equal instance.test_string_sequence, ['Hi', 'Hello', 'bar is called', 'Goodbye', 'Paalam']
   end
 
+  def test_conditional_callbacks
+    klass = Class.new do
+      include Callbacks
+
+      attr_accessor :test_string_sequence, :baz
+      attr_writer_with_callbacks :bar
+
+      def initialize
+        @test_string_sequence = []
+      end
+
+      before :bar=, :do_a, if: -> (arg) { arg == 'hooman' && @baz = true }
+      before :bar=, :do_b, if: -> (arg) { arg == 'hooman' && @baz = false }
+      before :bar=, :do_c, if: -> (arg) { arg == 'dooge' && @baz = true }
+      before :bar=, if: -> (arg) { arg == 'dooge' && @baz = true } do
+        do_d
+      end
+
+      def do_a
+        @test_string_sequence << 'a'
+      end
+
+      def do_b
+        @test_string_sequence << 'b'
+      end
+
+      def do_c
+        @test_string_sequence << 'c'
+      end
+
+      def do_d
+        @test_string_sequence << 'd'
+      end
+    end
+
+    instance = klass.new
+    instance.baz = true
+    instance.bar = 'dooge'
+    assert_equal instance.test_string_sequence, ['c', 'd']
+  end
+
   def test_attr_writer_with_callbacks_should_define_attr_writer_for_instance_variables_with_callbacks
     klass = Class.new do
       include Callbacks
@@ -168,14 +209,12 @@ class TestCallbacks < Test::Unit::TestCase
         @test_string_sequence << arg
       end
 
-      def say_hi_first(arg)
+      def say_hi_first
         @test_string_sequence << 'Hi'
-        @test_string_sequence << arg
       end
 
-      def say_goodbye(arg)
+      def say_goodbye
         @test_string_sequence << 'Goodbye'
-        @test_string_sequence << arg
       end
     end
 
@@ -183,7 +222,7 @@ class TestCallbacks < Test::Unit::TestCase
     instance.bar = 'someval'
 
     assert_equal instance.instance_variable_get(:@bar), 'someval'
-    assert_equal instance.test_string_sequence, ['Hi', 'someval', 'Hello', 'someval', 'Goodbye', 'someval', 'Paalam', 'someval']
+    assert_equal instance.test_string_sequence, ['Hi', 'Hello', 'someval', 'Goodbye', 'Paalam', 'someval']
   end
 
   def test_attr_reader_with_callbacks_should_define_attr_reader_for_instance_variables_with_callbacks

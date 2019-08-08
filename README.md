@@ -1,5 +1,7 @@
 # [Unofficial] DragonRuby Callbacks
 
+* Version: 0.2
+
 * A simple callback plug-n-play DSL for any Class heavily influenced by [Rails' ActiveSupport::Callbacks](https://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html)
 * Allows `before` and `after` hooks for calls to any method. TODO :`around`
 * Focuses on performance (not saying though it already is!! Performance tests still need to be done :)
@@ -163,6 +165,53 @@ class Camera
 end
 ```
 
+### Pseudo-Skipping Callbacks
+
+* via Ruby's [`instance_variable_get`](https://ruby-doc.org/core-1.9.1/Object.html#method-i-instance_variable_get) and [`instance_variable_set`](https://ruby-doc.org/core-1.9.1/Object.html#method-i-instance_variable_set)
+
+```ruby
+class Foo
+  include Callbacks
+
+  attr_writer_with_callbacks :bar
+
+  before :bar= do |arg|
+    puts 'before bar= is called!'
+  end
+end
+
+foo = Foo.new
+
+# normal way (callbacks are called):
+foo.bar= 'somevalue'
+# => 'before_bar= is called!'
+
+# but to "pseudo" skip all callbacks, and directly manipulate the instance variable value:
+# foo.instance_variable_set(:bar, 'somevalue')
+```
+
+* At the moment, I am not compelled (yet?) to fully support skipping callbacks because I do not want to pollute the DSL and I do not find myself yet needing such behaviour, because the callbacks are there for "integrity". If I really want the callbacks conditional, I'll just wrap the block with `if some_condition ... end`, or supply a third optional argument: `:if`. See below.
+
+### Conditional Callbacks
+
+```ruby
+class Monster
+  include Callbacks
+
+  attr_writer_with_callbacks :hp
+
+  after :hp=, :despawn, if: -> { @hp == 0 }
+
+  # above is just equivalently:
+  # after :hp= do |arg|
+  #   despawn if @hp == 0
+  # end
+
+  def despawn
+    # do something here, like say removing the Monster from the world
+  end
+```
+
 ### DSL
 
 #### Class Methods
@@ -288,3 +337,13 @@ foo.y('somevalue')
 ### TODO
 * should DragonRuby upgrade ruby version into 2.0, use `.prepend` in conjuction with `super` instead instead to have cleaner callbacks hook methods. Won't need to call `run_callbacks` explicitly anymore in custom methods.
 * when the need already arises, implement `around` (If you have ideas or want to help this part, please feel free to fork or send me a message! :)
+
+### Changelog
+
+* v0.2 (2019-08-08)
+
+    * Supported conditional callbacks with `:if`
+
+* v0.1 (2019-08-07)
+
+    * Done all

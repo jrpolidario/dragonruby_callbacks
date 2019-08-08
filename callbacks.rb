@@ -1,4 +1,8 @@
 module Callbacks
+  VERSION = '0.2'.freeze
+
+  VALID_OPTION_KEYS = [:if].freeze
+
   def self.included(base)
     base.instance_variable_set(:@before_callbacks, {})
     base.instance_variable_set(:@after_callbacks, {})
@@ -9,14 +13,23 @@ module Callbacks
 
   module ClassMethods
 
-    def before(method_name, callback_method_name = nil, &callback_proc)
-      callback_method_name_or_proc = callback_method_name || callback_proc
+    def before(method_name, callback_method_name = nil, options = {}, &callback_proc)
+      callback_method_name_or_proc = callback_proc || callback_method_name
+      unless [Symbol, String, Proc].include? callback_method_name_or_proc.class
+        raise ArgumentError, "Only `Symbol`, `String` or `Proc` allowed for `method_name`, but is #{callback_method_name_or_proc.class}"
+      end
 
-      raise ArgumentError, "only `Symbol`, `String` or `Proc` allowed, but is #{callback_method_name_or_proc.class}" unless [Symbol, String, Proc].include? callback_method_name_or_proc.class
+      invalid_option_keys = options.keys - VALID_OPTION_KEYS
+      unless invalid_option_keys.empty?
+        raise ArgumentError, "Invalid `options` keys: #{invalid_option_keys}. Valid are only: #{VALID_OPTION_KEYS}"
+      end
+      if options[:if] && !([Symbol, String, Proc].include? options[:if].class)
+        raise ArgumentError, "Only `Symbol`, `String` or `Proc` allowed for `options[:if]`, but is #{options[:if].class}"
+      end
 
       self.before_callbacks ||= {}
       self.before_callbacks[method_name.to_sym] ||= []
-      self.before_callbacks[method_name.to_sym] << callback_method_name_or_proc
+      self.before_callbacks[method_name.to_sym] << [callback_method_name_or_proc, options[:if]]
     end
 
     def before!(method_name, *remaining_args)
@@ -28,14 +41,23 @@ module Callbacks
     # def around
     # end
 
-    def after(method_name, callback_method_name = nil, &callback_proc)
-      callback_method_name_or_proc = callback_method_name || callback_proc
+    def after(method_name, callback_method_name = nil, options = {}, &callback_proc)
+      callback_method_name_or_proc = callback_proc || callback_method_name
+      unless [Symbol, String, Proc].include? callback_method_name_or_proc.class
+        raise ArgumentError, "Only `Symbol`, `String` or `Proc` allowed for `method_name`, but is #{callback_method_name_or_proc.class}"
+      end
 
-      raise ArgumentError, "only `Symbol`, `String` or `Proc` allowed, but is #{callback_method_name_or_proc.class}" unless [Symbol, String, Proc].include? callback_method_name_or_proc.class
+      invalid_option_keys = options.keys - VALID_OPTION_KEYS
+      unless invalid_option_keys.empty?
+        raise ArgumentError, "Invalid `options` keys: #{invalid_option_keys}. Valid are only: #{VALID_OPTION_KEYS}"
+      end
+      if options[:if] && ![Symbol, String, Proc].include?(options[:if].class)
+        raise ArgumentError, "Only `Symbol`, `String` or `Proc` allowed for `options[:if]`, but is #{options[:if].class}"
+      end
 
       self.after_callbacks ||= {}
       self.after_callbacks[method_name.to_sym] ||= []
-      self.after_callbacks[method_name.to_sym] << callback_method_name_or_proc
+      self.after_callbacks[method_name.to_sym] << [callback_method_name_or_proc, options[:if]]
     end
 
     def after!(method_name, *remaining_args)
@@ -79,11 +101,19 @@ module Callbacks
       before_callbacks = self.class.before_callbacks[method_name.to_sym]
 
       unless before_callbacks.nil?
-        before_callbacks.each do |before_callback|
-          if before_callback.is_a? Proc
-            instance_exec *args, &before_callback
-          else
-            send before_callback, *args
+        before_callbacks.each do |before_callback, options_if|
+          is_condition_truthy = true
+
+          if options_if
+            is_condition_truthy = instance_exec *args, &options_if
+          end
+
+          if is_condition_truthy
+            if before_callback.is_a? Proc
+              instance_exec *args, &before_callback
+            else
+              send before_callback
+            end
           end
         end
       end
@@ -93,11 +123,19 @@ module Callbacks
       after_callbacks = self.class.after_callbacks[method_name.to_sym]
 
       unless after_callbacks.nil?
-        after_callbacks.each do |after_callback|
-          if after_callback.is_a? Proc
-            instance_exec *args, &after_callback
-          else
-            send after_callback, *args
+        after_callbacks.each do |after_callback, options_if|
+          is_condition_truthy = true
+
+          if options_if
+            is_condition_truthy = instance_exec *args, &options_if
+          end
+
+          if is_condition_truthy
+            if after_callback.is_a? Proc
+              instance_exec *args, &after_callback
+            else
+              send after_callback
+            end
           end
         end
       end
