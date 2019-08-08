@@ -229,16 +229,17 @@ monster.hp -= 1 # hp is now 0, so despawn!
 
 #### Class Methods
 
-* `before(method_name, callback_method_name = nil, &callback_proc)`
+* `before(method_name, callback_method_name = nil, options = {}, &callback_proc)`
 
     * This means that before `method_name` method runs, run `callback_method_name` first (or run the block first if block is supplied instead of `callback_method_name`)
+    * Conditional callback via `options[:if]` is supported; see [conditional callbacks](#conditional-callbacks) above.
 
 * `before!(method_name, callback_method_name = nil, &callback_proc)`
 
     * Sometimes, I noticed that I forgot to define `method_name`! This is just basically like `before` except that this raises an error if `method_name` is not defined or not yet defined (at the time `before!` is called)
     * This works perfect in conjunction with `attr_writer_with_callbacks` as after this line, I can now safely call `before!` or `after!` because I am sure that I already defined everything I needed to define. If I forgot something then, this `before!` would raise an error and alert me, and not silently failing. Helps debugging :)
 
-* `after(method_name, callback_method_name = nil, &callback_proc)`
+* `after(method_name, callback_method_name = nil, options = {}, &callback_proc)`
 
     * same as `before` above, but just that the callback_method_name or callback_proc is called after method_name
 
@@ -357,7 +358,7 @@ foo.y('somevalue')
 
 * v0.2 (2019-08-08)
 
-    * Supported conditional callbacks with `:if`
+    * Supported [conditional callbacks](#conditional-callbacks) with `:if`
 
 * v0.1 (2019-08-07)
 
