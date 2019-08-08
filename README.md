@@ -1,11 +1,11 @@
 # [Unofficial] DragonRuby Callbacks
 
-* Version: 0.2
-
 * A simple callback plug-n-play DSL for any Class heavily influenced by [Rails' ActiveSupport::Callbacks](https://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html)
 * Allows `before` and `after` hooks for calls to any method. TODO :`around`
 * Focuses on performance (not saying though it already is!! Performance tests still need to be done :)
 * Probably gonna expand as I need it to be, as my game grows.
+
+*Version: 0.2*
 
 ### Dependencies
 * [DragonRuby](https://dragonruby.itch.io/)'s current ruby version: 1.9
