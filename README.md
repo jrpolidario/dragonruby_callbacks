@@ -38,9 +38,16 @@ class Sprite
   after :game_x=, :update_screen_coordinates_with_respect_to_camera
   after :game_y=, :update_screen_coordinates_with_respect_to_camera
 
-  # for flexibility, you can also do "block" mode:
+  # you can add multiple callbacks to a method (callbacks are called sequentially in FCFS order)
+  # after :game_x=, :do_something_1
+  # after :game_y=, :do_something_2
+
+  # for flexibility, you can also use one or many "block" mode:
   # after :game_x= do |arg|
   #   update_screen_coordinates_with_respect_to_camera
+  # end
+  # after :game_x= do |arg|
+  #   puts 'do something here'
   # end
 
   def initialize(opts = {})
@@ -167,7 +174,7 @@ end
 * `before!(method_name, callback_method_name = nil, &callback_proc)`
 
     * Sometimes, I noticed that I forgot to define `method_name`! This is just basically like `before` except that this raises an error if `method_name` is not defined or not yet defined (at the time `before!` is called)
-    * This works perfect in conjunction with `attr_writer_with_callbacks` as after this line, I can now safely call `before!` or `after!` because I am sure that I already defined everything I needed to define. If I forgot something then, this `before!` would raise an error and alert me, and not silently failing. Helps debugging :) this is one-line slower than `before` though.
+    * This works perfect in conjunction with `attr_writer_with_callbacks` as after this line, I can now safely call `before!` or `after!` because I am sure that I already defined everything I needed to define. If I forgot something then, this `before!` would raise an error and alert me, and not silently failing. Helps debugging :)
 
 * `after(method_name, callback_method_name = nil, &callback_proc)`
 
