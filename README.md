@@ -199,9 +199,10 @@ foo.instance_variable_set(:bar, 'somevalue')
 class Monster
   include Callbacks
 
+  attr_reader :hp
   attr_writer_with_callbacks :hp
 
-  after :hp=, :despawn, if: -> { @hp == 0 }
+  after :hp=, :despawn, if: -> (arg) { @hp == 0 }
 
   # above is just equivalently:
   # after :hp= do |arg|
@@ -209,9 +210,19 @@ class Monster
   # end
 
   def despawn
+    puts 'despawning!'
     # do something here, like say removing the Monster from the world
   end
 end
+
+monster = Monster.new
+monster.hp = 5
+monster.hp -= 1 # 4
+monster.hp -= 1 # 3
+monster.hp -= 1 # 2
+monster.hp -= 1 # 1
+monster.hp -= 1 # hp is now 0, so despawn!
+# => despawning!
 ```
 
 ### DSL
