@@ -22,7 +22,7 @@ require 'app/callbacks.rb'
 # for more info see dragonruby's samples/14_sprite_limit source code
 class Sprite
   # You'll need to include this to any class that you want to have callbacks available
-  includes Callback
+  includes Callbacks
 
   # you only are gonna be "reading" these values, that's why I changed this from `attr_accessor`
   attr_reader :sprite, :x, :y, :r, :g, :b, :alpha, :speed_x, :speed_y, :height, :image, :width, :height, :rotation
@@ -76,23 +76,31 @@ end
 * ^ all of the above just means that I could do the following
 
 ```ruby
-args.state.dooge ||= Sprite.new(
-  game_x: 50,
-  game_y: 75,
-  move_speed: 8,
-  width: 64,
-  height: 64,
-  image: 'images/dooge.png'
-)
+args.state.sprites ||= []
 
-args.state.hooman ||= Sprite.new(
-  game_x: 0,
-  game_y: 0,
-  move_speed: 5,
-  width: 64,
-  height: 128,
-  image: 'images/hooman.png'
-)
+if args.state.dooge.nil?
+  args.state.dooge = Sprite.new(
+    game_x: 50,
+    game_y: 75,
+    move_speed: 8,
+    width: 64,
+    height: 64,
+    image: 'images/dooge.png'
+  )
+  args.state.sprites << args.state.dooge
+end
+
+if args.state.hooman.nil?
+  args.state.hooman ||= Sprite.new(
+    game_x: 0,
+    game_y: 0,
+    move_speed: 5,
+    width: 64,
+    height: 128,
+    image: 'images/hooman.png'
+  )
+  args.state.sprites << args.state.hooman
+end
 
 camera ||= Camera.new
 
@@ -123,6 +131,23 @@ if args.state.dooge.moved?
   # then dooge's x and y values on the screen would be automatically updated
   dooge.game_x += x_move_speed_towards_hooman
   dooge.game_y += y_move_speed_towards_hooman
+end
+```
+
+*P.S. Above example just only shows the usage of callbacks when a Sprite's `game_x` or `game_y` changes, but for a more complete example, you'd also want to have callbacks when the Camera's `game_x` or `game_y` changes, because you'd want to update all the Sprites coordinates like below:*
+
+```ruby
+class Camera
+  include Callbacks
+  # ...
+  attr_writer_with_callbacks :game_x, :game_y #, ...
+
+  # assuming that you only have one Camera instance as say args.state.camera,
+  # this means that whenever the Camera moves (`game_x` or `game_y` changes), then
+  # all sprites screen coordinates are updated accordingly.
+  after :game_x= do
+    $gtk.args.state.sprites.map(&:update_screen_coordinates_with_respect_to_camera)
+  end
 end
 ```
 
@@ -160,7 +185,7 @@ class Foo
   # ^ above is just exactly the same as the code below
 
   # def bar=(arg)
-  #   run_callbacks arg do
+  #   run_callbacks :bar=, arg do
   #     @bar = arg
   #   end
   # end
@@ -182,7 +207,7 @@ class Foo
   # ^ above is just exactly the same as the code below
 
   # def bar
-  #   run_callbacks do
+  #   run_callbacks :bar do
   #     @bar
   #   end
   # end
