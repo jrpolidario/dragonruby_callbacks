@@ -132,6 +132,9 @@ if args.state.dooge.moved?
   dooge.game_x += x_move_speed_towards_hooman
   dooge.game_y += y_move_speed_towards_hooman
 end
+
+# render all sprites
+args.outputs.sprites << args.state.sprites.map(&:sprite)
 ```
 
 *P.S. Above example just only shows the usage of callbacks when a Sprite's `game_x` or `game_y` changes, but for a more complete example, you'd also want to have callbacks when the Camera's `game_x` or `game_y` changes, because you'd want to update all the Sprites coordinates like below:*
