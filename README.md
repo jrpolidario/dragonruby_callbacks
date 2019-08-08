@@ -127,15 +127,15 @@ end
 if args.state.dooge.moved?
   # let's just PRETEND on this tick, hooman didn't move (i.e. i didnt press any control key)
   # however let's say on this tick dooge is moving towards hooman (i mean because he is dooge)
-  x_distance_between_hooman_and_doge = args.state.hooman.game_x - args.state.doge.game_x
-  y_distance_between_hooman_and_doge = args.state.hooman.game_y - args.state.doge.game_y
+  x_distance_between_hooman_and_dooge = args.state.hooman.game_x - args.state.dooge.game_x
+  y_distance_between_hooman_and_dooge = args.state.hooman.game_y - args.state.dooge.game_y
 
   distance_to_travel = Math.sqrt(
-    (x_distance_between_hooman_and_doge ** 2) + (y_distance_between_hooman_and_doge ** 2)
+    (x_distance_between_hooman_and_dooge ** 2) + (y_distance_between_hooman_and_dooge ** 2)
   )
 
-  x_move_speed_towards_hooman = x_distance_between_hooman_and_doge / (distance_to_travel / args.state.dooge.move_speed)
-  y_move_speed_towards_hooman = y_distance_between_hooman_and_doge / (distance_to_travel / args.state.dooge.move_speed)
+  x_move_speed_towards_hooman = x_distance_between_hooman_and_dooge / (distance_to_travel / args.state.dooge.move_speed)
+  y_move_speed_towards_hooman = y_distance_between_hooman_and_dooge / (distance_to_travel / args.state.dooge.move_speed)
 
   # because dooge.game_x= and dooge.game_y= have after callbacks calling update_screen_coordinates_with_respect_to_camera
   # then dooge's x and y values on the screen would be automatically updated
