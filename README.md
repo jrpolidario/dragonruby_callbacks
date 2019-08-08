@@ -148,8 +148,10 @@ class Camera
   # assuming that you only have one Camera instance as say args.state.camera,
   # this means that whenever the Camera moves (`game_x` or `game_y` changes), then
   # all sprites screen coordinates are updated accordingly.
-  after :game_x= do
-    $gtk.args.state.sprites.map(&:update_screen_coordinates_with_respect_to_camera)
+  [:game_x=, :game_y=].each do |method_name|
+    after method_name do |arg|
+      $gtk.args.state.sprites.map(&:update_screen_coordinates_with_respect_to_camera)
+    end
   end
 end
 ```
