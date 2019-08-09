@@ -202,7 +202,7 @@ class Monster
   attr_reader :hp
   attr_writer_with_callbacks :hp
 
-  after :hp=, :despawn, if: -> (arg) { @hp == 0 }
+  after :hp=, :despawn, if: lambda { |arg| @hp == 0 }
 
   # above is just equivalently:
   # after :hp= do |arg|
