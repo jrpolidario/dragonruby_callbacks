@@ -28,13 +28,13 @@ class Sprite
   includes Callbacks
 
   # you only are gonna be "reading" these values, that's why I changed this from `attr_accessor`
-  attr_reader :sprite, :x, :y, :r, :g, :b, :alpha, :speed_x, :speed_y, :height, :image, :width, :height, :rotation
+  attr_reader :sprite, :x, :y, :r, :g, :b, :alpha, :move_speed, :height, :image, :width, :height, :rotation
 
   # now for "writing" values, instead of the default `attr_writer` generated-methods,
   # my Callbacks module provides the following method which just basically wraps the
   # normal `attr_writer` setter methods with a `run_callbacks do ... end` block
   # which you'd want to do in order to perform "something" if the value has been changed.
-  attr_writer_with_callbacks :sprite, :x, :y, :r, :g, :b, :alpha, :speed_x, :speed_y, :height, :image, :width, :height, :rotation
+  attr_writer_with_callbacks :sprite, :x, :y, :r, :g, :b, :alpha, :move_speed, :height, :image, :width, :height, :rotation
 
   # this just basically means if game_x changes (i.e another Monster sprite on the screen moves),
   # then update that monster sprite's screen coordinates with respect to camera
@@ -351,7 +351,7 @@ foo.y('somevalue')
 * open terminal and `cd` into this directory, and then run `ruby ./callbacks_test.rb`
 
 ### TODO
-* should DragonRuby upgrade ruby version into 2.0, use `.prepend` in conjuction with `super` instead instead to have cleaner callbacks hook methods. Won't need to call `run_callbacks` explicitly anymore in custom methods.
+* should DragonRuby upgrade ruby version into 2.0, use `.prepend` in conjuction with `super` instead to have cleaner callbacks hook methods. Won't need to call `run_callbacks` explicitly anymore in custom methods.
 * when the need already arises, implement `around` (If you have ideas or want to help this part, please feel free to fork or send me a message! :)
 
 ### Changelog
