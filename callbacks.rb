@@ -1,21 +1,21 @@
 module Callbacks
-  VERSION = '0.2'.freeze
+  VERSION = '0.2.1'.freeze
 
   VALID_OPTION_KEYS = [:if].freeze
 
   def self.included(base)
     base.instance_variable_set(:@before_callbacks, {})
     base.instance_variable_set(:@after_callbacks, {})
-    base.singleton_class.attr_accessor(:before_callbacks, :after_callbacks)
+    base.singleton_class.send(:attr_accessor, *[:before_callbacks, :after_callbacks])
     base.extend ClassMethods
-    base.include InstanceMethods
+    base.send(:include, InstanceMethods)
   end
 
   module ClassMethods
 
     def before(method_name, callback_method_name = nil, options = {}, &callback_proc)
       callback_method_name_or_proc = callback_proc || callback_method_name
-      unless [Symbol, String, Proc].include? callback_method_name_or_proc.class
+      unless [Symbol, String, Proc].any? { |klass| callback_method_name_or_proc.is_a? klass }
         raise ArgumentError, "Only `Symbol`, `String` or `Proc` allowed for `method_name`, but is #{callback_method_name_or_proc.class}"
       end
 
@@ -23,7 +23,7 @@ module Callbacks
       unless invalid_option_keys.empty?
         raise ArgumentError, "Invalid `options` keys: #{invalid_option_keys}. Valid are only: #{VALID_OPTION_KEYS}"
       end
-      if options[:if] && !([Symbol, String, Proc].include? options[:if].class)
+      if options[:if] && !([Symbol, String, Proc].any? { |klass| callback_method_name_or_proc.is_a? klass })
         raise ArgumentError, "Only `Symbol`, `String` or `Proc` allowed for `options[:if]`, but is #{options[:if].class}"
       end
 

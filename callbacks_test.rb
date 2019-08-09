@@ -152,10 +152,10 @@ class TestCallbacks < Test::Unit::TestCase
         @test_string_sequence = []
       end
 
-      before :bar=, :do_a, if: -> (arg) { arg == 'hooman' && @baz = true }
-      before :bar=, :do_b, if: -> (arg) { arg == 'hooman' && @baz = false }
-      before :bar=, :do_c, if: -> (arg) { arg == 'dooge' && @baz = true }
-      before :bar=, if: -> (arg) { arg == 'dooge' && @baz = true } do
+      before :bar=, :do_a, if: lambda { |arg| arg == 'hooman' && @baz = true }
+      before :bar=, :do_b, if: lambda { |arg| arg == 'hooman' && @baz = false }
+      before :bar=, :do_c, if: lambda { |arg| arg == 'dooge' && @baz = true }
+      before :bar=, if: lambda { |arg| arg == 'dooge' && @baz = true } do
         do_d
       end
 
@@ -264,5 +264,31 @@ class TestCallbacks < Test::Unit::TestCase
 
     assert_equal instance.bar, 'someval'
     assert_equal instance.test_string_sequence, ['Hi', 'Hello', 'Goodbye', 'Paalam']
+  end
+
+  def test_instance_of_subclass_of_proc_or_string_or_symbol_should_not_raise_argument_error
+    string_subclass = Class.new(String)
+
+    klass = Class.new do
+      include Callbacks
+
+      attr_accessor :test_string_sequence
+      attr_reader_with_callbacks :bar
+
+      def initialize
+        @test_string_sequence = []
+      end
+
+      before :bar, string_subclass.new('say_hi_first')
+
+      def say_hi_first
+        @test_string_sequence << 'Hi'
+      end
+    end
+
+    instance = klass.new
+    instance.bar
+
+    assert_equal instance.test_string_sequence, ['Hi']
   end
 end

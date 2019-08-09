@@ -6,7 +6,7 @@
 * Focuses on performance (not saying though it already is!! Performance tests still need to be done :)
 * Probably gonna expand as I need it to be, as my game grows.
 
-*Version: 0.2*
+*Version: 0.2.1*
 
 ### Dependencies
 * [DragonRuby](https://dragonruby.itch.io/)'s current ruby version: 1.9
@@ -25,7 +25,7 @@ require 'app/callbacks.rb'
 # for more info see dragonruby's samples/14_sprite_limit source code
 class Sprite
   # You'll need to include this to any class that you want to have callbacks available
-  includes Callbacks
+  include Callbacks
 
   # you only are gonna be "reading" these values, that's why I changed this from `attr_accessor`
   attr_reader :sprite, :x, :y, :r, :g, :b, :alpha, :move_speed, :height, :image, :width, :height, :rotation
@@ -355,6 +355,10 @@ foo.y('somevalue')
 * when the need already arises, implement `around` (If you have ideas or want to help this part, please feel free to fork or send me a message! :)
 
 ### Changelog
+
+* v0.2.1 (2019-08-09)
+
+    * Fixed syntax errors for ruby 1.9.3; Fixed not supporting subclasses of Proc, String, or Symbol
 
 * v0.2 (2019-08-08)
 
