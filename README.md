@@ -16,6 +16,21 @@
 
 * In DragonRuby, I wanted my Sprite objects to automatically adjust the position of the sprite on the screen when my character moves on the world (because the camera / view is following my character centered on the screen). I do not want to keep myself worrying about every update / change that needs to be done. And so, I wrote this small module to be used like the following (for example in my case)
 
+**Normal Way Without Callbacks:**
+
+```ruby
+
+def tick
+  # ...
+  # let's say that Sprite game_x and game_y refers to actual-world coordinates
+  # while Sprite x and y refers to screen coordinates (for rendering)
+  dooge ||= Sprite.new(game_x: 100, game_y: 100)
+  hooman ||= Sprite.new(game_x: 200, game_y: 200)
+
+  dooge.game_x =
+
+
+
 ```ruby
 # assuming you copy callbacks.rb into your /app folder
 require 'app/callbacks.rb'
@@ -71,8 +86,6 @@ class Sprite
   end
 
   def update_screen_coordinates_with_respect_to_camera
-    # game_x and game_y refers to actual-world coordinates
-    # while x and y refers to screen coordinates (for rendering)
     # in this example I have a transparent "solid" rectangular camera created in `def tick`
     # which freely follows the player as he/she moves the world
     @x = @game_x - $gtk.args.state.camera.game_x
@@ -124,24 +137,22 @@ if args.state.hooman.moved?
   camera.game_y = args.state.hooman.game_y
 end
 
-if args.state.dooge.moved?
-  # let's just PRETEND on this tick, hooman didn't move (i.e. i didnt press any control key)
-  # however let's say on this tick dooge is moving towards hooman (i mean because he is dooge)
-  x_distance_between_hooman_and_dooge = args.state.hooman.game_x - args.state.dooge.game_x
-  y_distance_between_hooman_and_dooge = args.state.hooman.game_y - args.state.dooge.game_y
+# let's just PRETEND on this tick, hooman didn't move (i.e. i didnt press any control key)
+# however let's say on this tick dooge is moving towards hooman (i mean because he is dooge)
+x_distance_between_hooman_and_dooge = args.state.hooman.game_x - args.state.dooge.game_x
+y_distance_between_hooman_and_dooge = args.state.hooman.game_y - args.state.dooge.game_y
 
-  distance_to_travel = Math.sqrt(
-    (x_distance_between_hooman_and_dooge ** 2) + (y_distance_between_hooman_and_dooge ** 2)
-  )
+distance_to_travel = Math.sqrt(
+  (x_distance_between_hooman_and_dooge ** 2) + (y_distance_between_hooman_and_dooge ** 2)
+)
 
-  x_move_speed_towards_hooman = x_distance_between_hooman_and_dooge / (distance_to_travel / args.state.dooge.move_speed)
-  y_move_speed_towards_hooman = y_distance_between_hooman_and_dooge / (distance_to_travel / args.state.dooge.move_speed)
+x_move_speed_towards_hooman = x_distance_between_hooman_and_dooge / (distance_to_travel / args.state.dooge.move_speed)
+y_move_speed_towards_hooman = y_distance_between_hooman_and_dooge / (distance_to_travel / args.state.dooge.move_speed)
 
-  # because dooge.game_x= and dooge.game_y= have after callbacks calling update_screen_coordinates_with_respect_to_camera
-  # then dooge's x and y values on the screen would be automatically updated
-  dooge.game_x += x_move_speed_towards_hooman
-  dooge.game_y += y_move_speed_towards_hooman
-end
+# because dooge.game_x= and dooge.game_y= have after callbacks calling update_screen_coordinates_with_respect_to_camera
+# then dooge's x and y values on the screen would be automatically updated
+dooge.game_x += x_move_speed_towards_hooman
+dooge.game_y += y_move_speed_towards_hooman
 
 # render all sprites
 args.outputs.sprites << args.state.sprites.map(&:sprite)
