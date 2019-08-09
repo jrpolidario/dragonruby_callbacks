@@ -184,11 +184,11 @@ end
 foo = Foo.new
 
 # normal way (callbacks are called):
-foo.bar= 'somevalue'
+foo.bar = 'somevalue'
 # => 'before_bar= is called!'
 
 # but to "pseudo" skip all callbacks, and directly manipulate the instance variable value:
-foo.instance_variable_set(:bar, 'somevalue')
+foo.instance_variable_set(:@bar, 'somevalue')
 ```
 
 * At the moment, I am not compelled (yet?) to fully support skipping callbacks because I do not want to pollute the DSL and I do not find myself yet needing such behaviour, because the callbacks are there for "integrity". If I really want the callbacks conditional, I'll just use the conditional argument. See below.
