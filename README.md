@@ -16,21 +16,6 @@
 
 * In DragonRuby, I wanted my Sprite objects to automatically adjust the position of the sprite on the screen when my character moves on the world (because the camera / view is following my character centered on the screen). I do not want to keep myself worrying about every update / change that needs to be done. And so, I wrote this small module to be used like the following (for example in my case)
 
-**Normal Way Without Callbacks:**
-
-```ruby
-
-def tick
-  # ...
-  # let's say that Sprite game_x and game_y refers to actual-world coordinates
-  # while Sprite x and y refers to screen coordinates (for rendering)
-  dooge ||= Sprite.new(game_x: 100, game_y: 100)
-  hooman ||= Sprite.new(game_x: 200, game_y: 200)
-
-  dooge.game_x =
-
-
-
 ```ruby
 # assuming you copy callbacks.rb into your /app folder
 require 'app/callbacks.rb'
