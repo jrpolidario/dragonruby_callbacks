@@ -14,7 +14,7 @@
 
 ### Usage (Motivation)
 
-* In DragonRuby, I wanted my Sprite objects to automatically adjust the position of the sprite on the page when my character moves on the world (because the camera / view is following my character centered on the screen). I do not want to keep myself worrying about every update / change that needs to be done. And so, I wrote this small module to be used like the following (for example in my case)
+* In DragonRuby, I wanted my Sprite objects to automatically adjust the position of the sprite on the screen when my character moves on the world (because the camera / view is following my character centered on the screen). I do not want to keep myself worrying about every update / change that needs to be done. And so, I wrote this small module to be used like the following (for example in my case)
 
 ```ruby
 # assuming you copy callbacks.rb into your /app folder
@@ -272,7 +272,7 @@ end
     * Similar to ruby's `attr_reader` except only that the defined getter method is wrapped with a `run_callbacks` block:
     * DON'T USE THIS for instance variables that you are gonna be "reading" or calling in each tick! ... as this will slow down your app (in varying degrees). Better just eager-evaluate the value and set or cache it somehow deterministically on write / changes (to its value dependencies)
     * therefore, probably you'd want to use attr_writer_with_callbacks to each of this value's dependency attributes instead to cache the value
-    * i.e. don't use this for the `:sprite` instance variable! as each call to `.sprite` will run each defined callbacks. Imagine if you have 1000 Sprite objects each on the page each of which `.sprite` is called!
+    * i.e. don't use this for the `:sprite` instance variable! as each call to `.sprite` will run each defined callbacks. Imagine if you have 1000 Sprite objects on the screen each of which `.sprite` is called!
 
 ```ruby
 class Foo
