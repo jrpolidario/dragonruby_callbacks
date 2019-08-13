@@ -1,5 +1,7 @@
 # [Unofficial] DragonRuby Callbacks
 
+**This repo is now unmaintained in favour of my other gem (+ new features) [`super_callbacks`](https://github.com/jrpolidario/super_callbacks). However, that requires Ruby ~> 2.0. For now you can use this for DragonRuby as this is compatible with 1.9. Should DragonRuby upgrade to support Ruby 2.0+ in the future, then you may now use `super_callbacks` instead of this.**
+
 * A simple callback plug-n-play DSL for any Class heavily influenced by [Rails' ActiveSupport::Callbacks](https://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html)
 * Allows `before` and `after` hooks for calls to any method. TODO :`around`
 * Supports conditional callbacks
